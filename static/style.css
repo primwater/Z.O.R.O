@@ -1,0 +1,179 @@
+/* Reset basic styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: #F7F8FA;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  overflow: hidden;
+  color: #333;
+  padding: 20px; /* Adds spacing around the edges of the screen */
+}
+
+/* Main container */
+#main-container {
+  width: 100%;
+  max-width: 1000px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: #FFFFFF;
+  border-radius: 16px;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Header section */
+header {
+  background-color: #3b82f6;
+  color: #fff;
+  padding: 20px;
+  border-radius: 16px 16px 0 0;
+  text-align: center;
+  font-size: 1.5em;
+  font-weight: 500;
+}
+
+/* Chat container */
+#chat-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+#chat-box {
+  flex-grow: 1;
+  padding: 20px;
+  overflow-y: auto;
+  background-color: #f9f9f9;
+  border-bottom: 1px solid #ddd;
+  border-radius: 0 0 16px 16px;
+}
+
+/* Message styling */
+.message {
+  padding: 12px;
+  border-radius: 16px;
+  margin-bottom: 10px;
+  max-width: 80%;
+  line-height: 1.5;
+  word-wrap: break-word;
+}
+
+.user {
+  background-color: #3b82f6;
+  color: white;
+  align-self: flex-end;
+  border-radius: 16px 16px 0 16px;
+  border-top-left-radius: 0;
+}
+
+.bot {
+  background-color: #e5e7eb;
+  color: #333;
+  align-self: flex-start;
+  border-radius: 16px 16px 16px 0;
+  border-top-right-radius: 0;
+}
+
+/* Input area */
+#input-container {
+  display: flex;
+  padding: 15px;
+  background-color: #ffffff;
+  border-top: 1px solid #ddd;
+}
+
+#user-input {
+  flex-grow: 1;
+  padding: 12px;
+  font-size: 16px;
+  border: 1px solid #ddd;
+  border-radius: 24px;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+#user-input:focus {
+  border-color: #3b82f6;
+}
+
+button {
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  padding: 14px;
+  margin-left: 10px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-size: 16px;
+}
+
+button:hover {
+  background-color: #2563eb;
+}
+
+/* Code block styling */
+pre {
+  background-color: #2d2d2d;
+  padding: 15px;
+  border-radius: 5px;
+  font-family: 'Courier New', monospace;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  border: 1px solid #ddd;
+  margin-bottom: 10px;
+  color: #f1f1f1;
+}
+
+pre code {
+  display: block;
+  word-wrap: break-word;
+}
+
+button.copy-button {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 5px;
+}
+
+button.copy-button:hover {
+  background-color: #45a049;
+}
+
+/* Language tag for code blocks */
+.language-tag {
+  font-size: 14px;
+  color: #3b82f6;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 600px) {
+  #main-container {
+    width: 100%;
+    padding: 10px;
+  }
+
+  #user-input {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  button {
+    padding: 12px;
+  }
+}

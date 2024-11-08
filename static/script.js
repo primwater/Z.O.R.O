@@ -10,24 +10,9 @@ function displayMessage(message, isUser) {
 
 // Format the message to highlight code blocks
 function formatMessage(message) {
-  // Match content inside triple backticks (```) and wrap it in a code block with a copy button
+  // Replace code blocks with styled HTML (between backticks)
   return message.replace(/```(.*?)```/gs, (match, code) => {
-    return `<div class="language-tag">Python</div><pre><code>${escapeHtml(code.trim())}</code></pre><button class="copy-button" onclick="copyCode('${escapeHtml(code.trim())}')">Copy Code</button>`;
-  });
-}
-
-// Function to escape special characters for inserting into HTML
-function escapeHtml(text) {
-  return text.replace(/[&<>"'`]/g, (match) => {
-    const escapeMap = {
-      '&': '&amp;',
-      '<': '&lt;',
-      '>': '&gt;',
-      '"': '&quot;',
-      "'": '&#039;',
-      '`': '&#96;',
-    };
-    return escapeMap[match];
+    return `<div class="language-tag">Python</div><pre><code>${code.trim()}</code></pre><button class="copy-button" onclick="copyCode('${code.trim()}')">Copy Code</button>`;
   });
 }
 

@@ -1,5 +1,4 @@
 import os
-import re
 from flask import Flask, request, jsonify, send_file
 import google.generativeai as genai
 from dotenv import load_dotenv
@@ -11,7 +10,7 @@ load_dotenv()
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 app = Flask(__name__)
 
-# Set up model configuration
+# Model configuration
 generation_config = {
     "temperature": 1,
     "top_p": 0.95,
@@ -20,45 +19,51 @@ generation_config = {
     "response_mime_type": "text/plain",
 }
 
-# Initialize the model
+# Initialize the model with instructions for Zoro
 model = genai.GenerativeModel(
     model_name="gemini-1.5-pro-002",
     generation_config=generation_config,
-    system_instruction="""You are Zoro, an AI assistant focused on coding and providing professional, clear, and concise answers. 
-Please respond in a friendly, professional tone and make sure your answers are easy to understand.
-If you don’t know something, be honest and offer to look it up if needed.
-Stay on topic and ask for clarification if you don't fully understand the user’s request.
-You were created by a 14 year old named Blake Cary""",
+    system_instruction="""You are Zoro, an AI assistant focused on coding, providing clear answers.
+If you include code, wrap it in triple backticks (```).
+Only respond with code when the user specifies, and keep your tone helpful and direct.
+If you don’t know something, admit it, and stay on topic.""",
 )
 
-# Serve index.html directly from the main directory
+# Serve the main page
 @app.route("/")
 def index():
     return send_file("index.html")
 
+# Chat route to handle the conversation
 @app.route("/chat", methods=["POST"])
 def chat():
     user_input = request.json.get("message")
-    
-    # Start a new chat session
     chat_session = model.start_chat(history=[])
-    
-    # Get the AI response
     response = chat_session.send_message(user_input)
+
+    # Format the response to highlight code blocks and add a "Copy Code" button
+    formatted_response = format_code_response(response.text)
     
-    # Check if the response contains code (triple backticks), and clean it up if so
-    response_text = response.text
-    
-    # Clean up the code (remove triple backticks)
-    cleaned_text = re.sub(r'```(.*?)```', r'\1', response_text, flags=re.DOTALL)
-    
-    # If the response contains code, mark it and send it back
-    is_code = "```" in response_text  # Check if there's code in the response
-    
-    return jsonify({
-        "response": cleaned_text,  # Send cleaned response
-        "is_code": is_code  # Indicate if it's code or not
-    })
+    return jsonify({"response": formatted_response})
+
+# Function to detect and format code sections
+def format_code_response(response_text):
+    # Split text on code markers, adding styling and the "Copy Code" button
+    if "```" in response_text:
+        parts = response_text.split("```")
+        formatted = ""
+        for i, part in enumerate(parts):
+            if i % 2 == 1:  # Inside a code block
+                language = part.split("\n", 1)[0]
+                code = part[len(language):].strip()
+                formatted += f'<div class="code-block"><span class="language">{language}</span>' \
+                             f'<pre><code>{code}</code></pre>' \
+                             '<button onclick="copyCode(this)">Copy Code</button></div>'
+            else:
+                formatted += f"<p>{part}</p>"
+        return formatted
+    else:
+        return f"<p>{response_text}</p>"
 
 if __name__ == "__main__":
     app.run(debug=True)
